@@ -1,35 +1,35 @@
 /*global $, PrettyJSON */
 
 var Top = {
-    init: function() {
+    listResultQueries: [],
+    listExplain: [],
+
+    init: function(){
         this.bindEvents();
     },
-    bindEvents: function () {
+    bindEvents: function(){
         var run = $("#run");
         var addButton = $("#addButton");
 
         run.click(function(){
-            var url = $("#url").val();
-            var query = $("#query").val();
-            Top.run(url, query);
+            Top.url = $("#url").val();
+            Top.run();
         });
         
         addButton.click(function(){
-            Top.addButton();
+            Top.addTextArea();
         });
+
+    },
+    clearLists: function(){
+        this.listResultQueries = [];
+        this.listExplain = [];
+        $('#response').hide();
         
     },
-    run: function(url, query){
-        $.post(url, query).done(function(data){
-            Top.prettyJson("#response", data);
-            var chart = $("#chart");
-            chart.show();
-            Top.createChart(data);
-        }).fail(function(data){
-            var chart = $("#chart");
-            chart.hide();
-            Top.prettyJson("#response", data);
-        });
+    run: function(){
+        this.clearLists();
+        this.makeQueries();
     },
     prettyJson: function(selector, data){
         new PrettyJSON.view.Node({
@@ -44,21 +44,33 @@ var Top = {
         }
         return list;
     },
-    createChart: function(data){
+    makeSeries: function(numberOfQuery, explain){
+        this.listExplain.push({ name: 'Query' + (numberOfQuery + 1), data: explain});
+    },
+    createChart: function(){
         var chart = $('#chart');
-        var explain = this.explainQuery(data);
+        for (var i=0; i < this.listResultQueries.length; i++){
+            var explain = this.explainQuery(this.listResultQueries[i]);
+            this.makeSeries(i, explain);
+        }
         chart.highcharts({
                     chart: {
                         type: 'line',
                         marginRight: 130,
-                        marginBottom: 25
+                        marginBottom: 50,
                     },
                     title: {
                         text: 'Query',
                         x: -20 //center
                     },
+                    credits: {
+                        enabled: false
+                    },
                     xAxis: {
-                        categories: []
+                        categories: [],
+                        title: {
+                            text: "Number of Documents"
+                        }
                     },
                     yAxis: {
                         title: {
@@ -81,17 +93,30 @@ var Top = {
                         y: 100,
                         borderWidth: 0
                     },
-                    series: [{
-                        name: 'Primeira Query',
-                        data: explain
-                    }]
+                    series: this.listExplain
                 });
     },
-    addButton: function(){
+    addTextArea: function(){
         var textarea = $("#first-query");
-        if ($(".query").length < 2){
-            textarea.after('<textarea  rows="8" cols="40", class="query"></textarea>');
-        }
+        textarea.after('<textarea  rows="8" cols="40", class="query"></textarea>');
+    },
+    makeQueries: function(){
+        var queries = $(".query");
+        this.postEsearch(queries);
+        this.createChart();
+    },
+    postEsearch: function(queries){
+        for(var i=0; i < queries.length; i++){
+            var query = $(queries[i]).val();
+            $.ajax({
+              type: 'POST',
+              url: this.url,
+              data: query,
+              error: function(data){$('#response').show();Top.prettyJson("#response", JSON.parse(data.responseText));},
+              success: function(data){Top.listResultQueries.push(data);},
+              async:false
+            });
+        }        
     }
 };
 
