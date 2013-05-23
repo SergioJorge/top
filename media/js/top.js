@@ -97,8 +97,8 @@ var Top = {
                 });
     },
     addTextArea: function(){
-        var textarea = $("#first-query");
-        textarea.after('<textarea  rows="8" cols="40", class="query"></textarea>');
+        var textareas = $(".queries");
+        textareas.append('<textarea  rows="8" cols="40", class="query"></textarea>');
     },
     makeQueries: function(){
         var queries = $(".query");
@@ -118,7 +118,7 @@ var Top = {
               success: function(data){Top.listResultQueries.push(data);},
               async:false
             });
-        }        
+        }
     }
 };
 
