@@ -1,0 +1,70 @@
+<html>
+<head>
+    <title>Top</title>
+    <link rel="stylesheet" href="media/css/pretty-json.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="media/css/top.css" type="text/css" media="screen" title="no title" charset="utf-8">
+</head>
+<body>
+    <label for="url">Url :</label>
+    <!-- <input type="text" value="http://esearch.globoi.com/ge/_search" id="url"> -->
+    <input type="text" value="http://localhost:1980/sp_globo.com/_search" id="url">
+    <br />
+    <label for="query">Query :</label><br />
+    <textarea name="Query" rows="8" cols="40", class="query" id="first-query">{
+        "query": {
+            "custom_score": {
+                "query": {
+                    "query_string": {
+                        "fields": ["body", "title", "site", "species", "contentGroup", "program", "channel"],
+                        "query": "teste",
+                        "default_operator": "AND",
+                        "analyzer": "globo_analyzer"
+                    } 
+                },
+                "params": {
+                    "numerador": 80,
+                    "denominador": 1e-8,
+                    "um": 1
+                },
+                 "script": "_score * (numerador / (denominador * (time() - (doc['_type'].value=='video'?doc['issued'].date.millis:doc['modified'].date.millis)) + um))"
+            }
+        },
+        "highlight": {
+            "fields": {
+                "body": {
+                    "number_of_fragments": 2,
+                    "fragment_size": 130
+                }
+            }
+        },
+        "facets": {
+            "species": {
+                "terms": {
+                    "field": "species",
+                    "size": 100
+                }
+            }
+        }
+    }</textarea>
+    <br />
+    <button type="button" id="addButton">+</button>
+    <input type="button" value="Run" id="run">
+    
+    <br />
+    
+    <div id="response">
+    </div><br />
+    <div id="chart">
+    </div>
+    
+    <script type="text/javascript" src="media/js/jquery-min-1.9.1.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="media/js/highcharts-exporting.js"></script>
+    <script type="text/javascript" src="media/js/underscore-min.js"></script>
+    <script type="text/javascript" src="media/js/backbone-js-min.js"></script>
+    <script type="text/javascript" src="media/js/pretty-json-min.js"></script>
+    <script type="text/javascript" src="media/js/top.js"></script>
+    
+    
+</body>
+</html>
