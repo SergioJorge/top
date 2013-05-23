@@ -11,46 +11,48 @@
         <div class="row">
             <div class="span12">
                 <label for="url">Url :</label>
-                <!-- <input type="text" value="http://esearch.globoi.com/ge/_search" id="url"> -->
-                <input type="text" value="http://localhost:1980/sp_globo.com/_search" id="url">
+                <input type="text" value="http://esearch.globoi.com/ge/_search" id="url">
                 <br />
                 <label for="first-query">Query :</label>
-                <textarea name="Query" rows="8" cols="40", class="query" id="first-query">{
-                    "query": {
-                        "custom_score": {
-                            "query": {
-                                "query_string": {
-                                    "fields": ["body", "title", "site", "species", "contentGroup", "program", "channel"],
-                                    "query": "teste",
-                                    "default_operator": "AND",
-                                    "analyzer": "globo_analyzer"
-                                } 
-                            },
-                            "params": {
-                                "numerador": 80,
-                                "denominador": 1e-8,
-                                "um": 1
-                            },
-                             "script": "_score * (numerador / (denominador * (time() - (doc['_type'].value=='video'?doc['issued'].date.millis:doc['modified'].date.millis)) + um))"
-                        }
-                    },
-                    "highlight": {
-                        "fields": {
-                            "body": {
-                                "number_of_fragments": 2,
-                                "fragment_size": 130
+                <fieldset class="queries">
+                    <textarea name="Query" rows="8" cols="40", class="query" id="first-query">{
+                        "query": {
+                            "custom_score": {
+                                "query": {
+                                    "query_string": {
+                                        "fields": ["body", "title", "site", "species", "contentGroup", "program", "channel"],
+                                        "query": "teste",
+                                        "default_operator": "AND",
+                                        "analyzer": "globo_analyzer"
+                                    }
+                                },
+                                "params": {
+                                    "numerador": 80,
+                                    "denominador": 1e-8,
+                                    "um": 1
+                                },
+                                 "script": "_score * (numerador / (denominador * (time() - (doc['_type'].value=='video'?doc['issued'].date.millis:doc['modified'].date.millis)) + um))"
                             }
-                        }
-                    },
-                    "facets": {
-                        "species": {
-                            "terms": {
-                                "field": "species",
-                                "size": 100
+                        },
+                        "highlight": {
+                            "fields": {
+                                "body": {
+                                    "number_of_fragments": 2,
+                                    "fragment_size": 130
+                                }
+                            }
+                        },
+                        "facets": {
+                            "species": {
+                                "terms": {
+                                    "field": "species",
+                                    "size": 100
+                                }
                             }
                         }
                     }
-                }</textarea>
+                    </textarea>
+                </fieldset>
                 <br />
                 <button type="button" id="addButton" class="btn">+</button>
                 <input type="button" value="Run" id="run" class="btn">
