@@ -103,7 +103,7 @@ var Top = {
     makeQueries: function(){
         var queries = $(".query");
         this.postEsearch(queries);
-        if(this.listResultQueries.length > 1){
+        if(this.listResultQueries.length >= 1){
             this.createChart();
         }
     },
