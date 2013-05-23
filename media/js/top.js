@@ -57,7 +57,7 @@ var Top = {
                     chart: {
                         type: 'line',
                         marginRight: 130,
-                        marginBottom: 50,
+                        marginBottom: 50
                     },
                     title: {
                         text: 'Query',
@@ -103,7 +103,9 @@ var Top = {
     makeQueries: function(){
         var queries = $(".query");
         this.postEsearch(queries);
-        this.createChart();
+        if(this.listResultQueries.length > 1){
+            this.createChart();
+        }
     },
     postEsearch: function(queries){
         for(var i=0; i < queries.length; i++){
