@@ -32,7 +32,6 @@ var Top = {
     },
     run: function(){
         var url = $("#url");
-        debugger;
         if (url.val()){
             this.clearLists();
             this.makeQueries();
