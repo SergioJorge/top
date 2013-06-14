@@ -7,3 +7,95 @@ textarea {
     width: 100%;
     height: 35px;
 }
+
+#helper {
+    width: 120px;
+}
+
+#helper li a {
+    cursor: pointer;
+}
+
+.aggregator {
+    position: relative;
+}
+
+.removeButton {
+    position: absolute;
+    right: 10px;
+    top: 3px;
+}
+
+.removeButton:hover{
+    background-color: transparent;
+}
+
+.brand {
+    font-family: Arial Unicode MS,Arial,sans-serif;
+}
+
+header {
+    min-height: 40px;
+    padding-right: 20px;
+    padding-left: 20px;
+    background-color: #fafafa;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    margin-bottom: 20px;
+}
+
+header .brand {
+    float: left;
+    margin-top: 10px;
+    font-size: 20px;
+    color: #777777;
+    text-shadow: 0 1px 0 #ffffff;
+    text-decoration: none;
+}
+
+header .version {
+    font-size: 9px;
+    letter-spacing: 0;
+    vertical-align: top;
+    text-transform: lowercase;
+    font-weight: 400;
+    display: block;
+    float: left;
+    margin-top: 16px;
+    margin-left: 2px;
+}
+
+header ul {
+    float: right;
+    margin-top: 10px;
+    margin-left: 5px;
+}
+
+header li {
+    list-style: none;
+}
+
+header li a {
+    text-decoration: none;
+}
+
+header li a:hover {
+    text-decoration: none;
+}
+
+.container label {
+    font-size: 15px;
+    color: #999;
+    font-weight: 100;
+    text-transform: uppercase;
+}
+
+.footer {
+    padding: 30px 0;
+    border-top: 1px solid #e5e5e5;
+    background-color: #f5f5f5;
+}
+
+.footer li {
+    list-style: none;
+}

@@ -10,6 +10,10 @@ var Top = {
     bindEvents: function(){
         var run = $("#run");
         var addButton = $("#addButton");
+        
+        $(".container").on("click", ".removeButton", function(){
+            this.parentElement.remove();
+        });
 
         run.click(function(){
             Top.url = $("#url").val();
@@ -17,10 +21,9 @@ var Top = {
         });
         
         addButton.click(function(){
-            Top.addTextArea();
+            Top.addQuery();
         });
-
-    },
+    },    
     clearLists: function(){
         this.listResultQueries = [];
         this.listExplain = [];
@@ -28,8 +31,12 @@ var Top = {
         
     },
     run: function(){
-        this.clearLists();
-        this.makeQueries();
+        var url = $("#url");
+        debugger;
+        if (url.val()){
+            this.clearLists();
+            this.makeQueries();
+        }
     },
     prettyJson: function(selector, data){
         new PrettyJSON.view.Node({
@@ -96,9 +103,13 @@ var Top = {
                     series: this.listExplain
                 });
     },
-    addTextArea: function(){
+    addQuery: function(){
         var textareas = $(".queries");
-        textareas.append('<textarea  rows="8" cols="40", class="query"></textarea>');
+        this.numberQueries = $(".query").length + 1;
+        textareas.append('<div id="aggregator-'+this.numberQueries+'" class="aggregator"></div>');
+        var aggregator = $('#aggregator-'+this.numberQueries);
+        aggregator.append('<textarea  rows="8" cols="40", class="query" id="query-'+this.numberQueries+'"></textarea>');
+        aggregator.append('<button type="button" class="removeButton btn close">&times;</button>');
     },
     makeQueries: function(){
         var queries = $(".query");
