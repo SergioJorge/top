@@ -8,31 +8,24 @@ var Top = {
         this.bindEvents();
     },
     bindEvents: function(){
-        var run = $("#run");
-        var addButton = $("#addButton");
-        
+        $("#helper").on("click", "#addButton", function(){
+            Top.addQuery();
+        });
         $(".container").on("click", ".removeButton", function(){
             this.parentElement.remove();
         });
-
-        run.click(function(){
+        $("#helper").on("click", "#run", function(){
             Top.url = $("#url").val();
             Top.run();
-        });
-        
-        addButton.click(function(){
-            Top.addQuery();
         });
     },    
     clearLists: function(){
         this.listResultQueries = [];
         this.listExplain = [];
         $('#response').hide();
-        
     },
     run: function(){
-        var url = $("#url");
-        if (url.val()){
+        if (Top.url){
             this.clearLists();
             this.makeQueries();
         }
