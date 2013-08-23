@@ -8,13 +8,13 @@ var Top = {
         this.bindEvents();
     },
     bindEvents: function(){
-        $("#helper").on("click", "#addButton", function(){
+        $("body").on("click", "#addQuery", function(){
             Top.addQuery();
         });
-        $(".container").on("click", ".removeButton", function(){
+        $("body").on("click", ".removeButton", function(){
             this.parentElement.remove();
         });
-        $("#helper").on("click", "#run", function(){
+        $("body").on("click", "#run", function(){
             Top.url = $("#url").val();
             Top.run();
         });
@@ -124,6 +124,5 @@ var Top = {
         }
     }
 };
-
 
 Top.init();
