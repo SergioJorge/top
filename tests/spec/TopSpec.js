@@ -64,21 +64,51 @@ describe("Top", function() {
         expect(lengthQueries).toBe(1);
     });
 
-    it("should make query and create a chart", function(){
-        var chart = $("#chart");
-        $("#url").val("http://localhost:1980/admin/_search");
-        $("#first-query").val("{}");
-        var chartEmpty = chart.height();
-        expect(chartEmpty).toEqual(0);
-        $("#run").click();
-        var chartHeigth = chart.height();
-        expect(chartHeigth).not.toEqual(0);
-    });
+    describe("requests", function(){
+        beforeEach(function(){
+          spyOn($, 'ajax');
+        });
 
-    it("should make a query with invalid json and return a error response", function(){
-        $("#url").val("http://localhost:1980/admin/_search");
-        $("#first-query").val("INVALID JSON");
-        $("#run").click();
-        expect($("#response").html()).toContain("[Failed to parse source [INVALID JSON]]");
+        describe("valid json", function() {
+          var chart, data;
+
+          beforeEach(function(){
+            chart = $("#chart");
+            $("#url").val("http://localhost:1980/admin/_search");
+            $("#first-query").val("{}");
+            data = {hits:{hits:[{_score:0.057534903}]}}
+          });
+
+
+          it("should make query and create a chart", function(){
+              var chartEmpty = chart.height();
+              expect(chartEmpty).toEqual(0);
+              $.ajax.andCallFake(function(args) {
+                args.success(data);
+              });
+              $("#run").click();
+              var chartHeigth = chart.height();
+              expect(chartHeigth).not.toEqual(0);
+          });
+        });
+
+
+        describe("invalid json", function(){
+          var failMessage = 'Fail!';
+
+          beforeEach(function(){
+            $("#url").val("http://localhost:1980/admin/_search");
+            $("#first-query").val("INVALID JSON");
+            spyOn(PrettyJSON.view,'Node').andReturn(null);
+          });
+
+          it("should make a query with invalid json and return a error response", function(){
+              $("#run").click();
+              $.ajax.mostRecentCall.args[0].error({responseText: JSON.stringify(failMessage)})
+              expect(PrettyJSON.view.Node).toHaveBeenCalled();
+              expect(PrettyJSON.view.Node.mostRecentCall.args[0].el).toEqual($("#response"));
+              expect(PrettyJSON.view.Node.mostRecentCall.args[0].data).toEqual(failMessage);
+          });
+      });
     });
 });
